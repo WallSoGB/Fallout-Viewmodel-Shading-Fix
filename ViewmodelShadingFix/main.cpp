@@ -35,39 +35,45 @@ static NiPoint3* __stdcall EyeOffsetFixHook(NiPoint3* pOut, NiPoint3* pV, void* 
 	return StdCall<NiPoint3*>(0xEE6DF8, pOut, pV, pM);
 }
 
-static NiNode* __cdecl OffsetPlayerLightPositionsHook() {
+static void OffsetLights(NiNode* apNode) {
 	kLightOffset = BSShaderManager::GetShadowSceneNode(0)->kLightingOffset;
 
-	NiNode* pPlayerNode = PlayerCharacter::GetSingleton()->spPlayerNode;
-	ForEachLight(pPlayerNode, [](NiAVObject* apLight) {
+	ForEachLight(apNode, [](NiAVObject* pLight) {
 		// Store the original position of the light
-		NiPoint3 kLightPos = apLight->m_kWorld.m_Translate;
-		kLightPosMap.emplace(apLight, kLightPos);
+		NiPoint3 kLightPos = pLight->m_kWorld.m_Translate;
+		kLightPosMap.emplace(pLight, kLightPos);
 
 		// Apply negative offset to the light, so it will get cancelled out later on
-		apLight->m_kWorld.m_Translate = kLightPos - kLightOffset;
+		pLight->m_kWorld.m_Translate = kLightPos - kLightOffset;
 		}
 	);
+}
+
+static void RestoreLights(NiNode* apNode) {
+	ForEachLight(apNode, [](NiAVObject* pLight) {
+		NiPoint3 kPos = kLightPosMap.find(pLight)->second;
+
+		// Restore the original position of the light
+		pLight->m_kWorld.m_Translate = kPos;
+		}
+	);
+	kLightPosMap.clear();
+}
+
+static NiNode* __cdecl OffsetPlayerLightPositionsHook() {
+	OffsetLights(PlayerCharacter::GetSingleton()->spPlayerNode);
 	return *(NiNode**)0x11DEB7C;
 }
 
 static void __fastcall RestorePlayerLightPositionsHook(void* apThis) {
-	NiNode* pPlayerNode = PlayerCharacter::GetSingleton()->spPlayerNode;
-	ForEachLight(pPlayerNode, [](NiAVObject* apLight) {
-		NiPoint3 kPos = kLightPosMap.find(apLight)->second;
-
-		// Restore the original position of the light
-		apLight->m_kWorld.m_Translate = kPos;
-		}
-	);
-	kLightPosMap.clear();
+	RestoreLights(PlayerCharacter::GetSingleton()->spPlayerNode);
 	ThisStdCall(0x404EE0, apThis);
 }
 
 bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info) {
 	info->infoVersion = PluginInfo::kInfoVersion;
-	info->name = "Viewmodel Shading Fix";
-	info->version = 100;
+	info->name = "ViewmodelShadingFix";
+	info->version = 200;
 	return true;
 }
 
@@ -81,6 +87,9 @@ bool NVSEPlugin_Load(NVSEInterface* nvse) {
 		// Ironic, isn't it?
         ReplaceCall(0x87513F, OffsetPlayerLightPositionsHook);
         ReplaceCall(0x875BB8, RestorePlayerLightPositionsHook);
+
+		// Fix PipBoy menu light being offset (we do that already)
+		SafeWrite8(0x874F76, 0xEB);
 	}
 
 	return true;
