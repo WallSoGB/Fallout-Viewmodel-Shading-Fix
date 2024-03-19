@@ -327,7 +327,11 @@ ASSERT_OFFSET(ShadowSceneNode, kLightingOffset, 0x1E4);
 class BSShaderManager {
 public:
 	static ShadowSceneNode* GetShadowSceneNode(UInt32 aeType) {
+#ifdef FO3
+		return ((ShadowSceneNode**)0x116EFB8)[aeType];
+#else
 		return ((ShadowSceneNode**)0x11F91C8)[aeType];
+#endif
 	}
 };
 
@@ -338,7 +342,11 @@ public:
 	NiPointer<NiNode> spPlayerNode;
 
 	static PlayerCharacter* GetSingleton() {
+#ifdef FO3
+		return *(PlayerCharacter**)0x107A104;
+#else
 		return *(PlayerCharacter**)0x11DEA3C;
+#endif
 	}
 };
 ASSERT_OFFSET(PlayerCharacter, spPlayerNode, 0x694);
