@@ -6,7 +6,11 @@
 #define ASSERT_SIZE(a, b) static_assert(sizeof(a) == b, "Wrong structure size!");
 #define ASSERT_OFFSET(a, b, c) static_assert(offsetof(a, b) == c, "Wrong member offset!");
 #define CREATE_OBJECT(CLASS, ADDRESS) static CLASS* CreateObject() { return StdCall<CLASS*>(ADDRESS); };
+#ifdef FO3
+#define IS_NODE(object) ((*(UInt32**)object)[3 * 4 >> 2] == 0xAA2340)
+#else
 #define IS_NODE(object) ((*(UInt32**)object)[3 * 4 >> 2] == 0x6815C0)
+#endif
 
 class BGSDistantObjectBlock;
 class bhkBlendCollisionObject;
@@ -327,11 +331,27 @@ ASSERT_OFFSET(ShadowSceneNode, kLightingOffset, 0x1E4);
 class BSShaderManager {
 public:
 	static ShadowSceneNode* GetShadowSceneNode(UInt32 aeType) {
+#ifdef FO3
+		return ((ShadowSceneNode**)0x116EFB8)[aeType];
+#else
 		return ((ShadowSceneNode**)0x11F91C8)[aeType];
+#endif
 	}
 };
 
 
+#ifdef FO3
+class PlayerCharacter {
+public:
+	UInt32 filler[0x5F0 / 4];
+	NiPointer<NiNode> spPlayerNode;
+
+	static PlayerCharacter* GetSingleton() {
+		return *(PlayerCharacter**)0x107A104;
+	}
+};
+ASSERT_OFFSET(PlayerCharacter, spPlayerNode, 0x5F0);
+#else
 class PlayerCharacter {
 public:
 	UInt32 filler[0x694 / 4];
@@ -342,3 +362,4 @@ public:
 	}
 };
 ASSERT_OFFSET(PlayerCharacter, spPlayerNode, 0x694);
+#endif

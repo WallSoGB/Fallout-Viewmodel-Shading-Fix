@@ -18,7 +18,4 @@
     </ClInclude>
     <ClInclude Include="GameData.hpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="exports.def" />
-  </ItemGroup>
 </Project>

@@ -1,4 +1,0 @@
-LIBRARY	"Viewmodel Shading Fix"
-EXPORTS
-NVSEPlugin_Query
-NVSEPlugin_Load
