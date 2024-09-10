@@ -61,13 +61,9 @@ static void OffsetLights(NiNode* apNode) {
 }
 
 static void RestoreLights(NiNode* apNode) {
-	ForEachLight(apNode, [](NiAVObject* pLight) {
-		NiPoint3 kPos = kLightPosMap.find(pLight)->second;
+	for (auto& rData : kLightPosMap)
+		rData.first->m_kWorld.m_Translate = rData.second;
 
-		// Restore the original position of the light
-		pLight->m_kWorld.m_Translate = kPos;
-		}
-	);
 	kLightPosMap.clear();
 }
 
