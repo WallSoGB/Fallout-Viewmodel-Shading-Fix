@@ -4,6 +4,7 @@
 #include "GameData.hpp"
 
 #define EXTERN_DLL_EXPORT extern "C" __declspec(dllexport)
+#define VERSION 210
 
 #ifdef FO3
 static NiRTTI* NiLightRTTI = (NiRTTI*)0x108F41C;
@@ -81,7 +82,7 @@ static void __cdecl RestorePlayerLightPositionsHook(float afFOV) {
 EXTERN_DLL_EXPORT bool FOSEPlugin_Query(const FOSEInterface* fose, PluginInfo* info) {
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "ViewmodelShadingFix";
-	info->version = 200;
+	info->version = VERSION;
 	return true;
 }
 
@@ -116,7 +117,7 @@ static void __fastcall RestorePlayerLightPositionsHook(void* apThis) {
 EXTERN_DLL_EXPORT bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info) {
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "ViewmodelShadingFix";
-	info->version = 200;
+	info->version = VERSION;
 	return true;
 }
 
