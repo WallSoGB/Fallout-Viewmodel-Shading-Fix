@@ -189,6 +189,42 @@ public:
 	__forceinline T_Data* operator->() const { return m_pObject; }
 };
 
+class NiFrustum {
+public:
+	NiFrustum() : m_fLeft(0.0f), m_fRight(0.0f), m_fTop(0.0f), m_fBottom(0.0f), m_fNear(0.0f), m_fFar(0.0f), m_bOrtho(false) {}
+	NiFrustum(float afLeft, float afRight, float afTop, float afBottom, float afNear, float afFar, bool abOrtho) {
+		m_fLeft = afLeft;
+		m_fRight = afRight;
+		m_fTop = afTop;
+		m_fBottom = afBottom;
+		m_fNear = afNear;
+		m_fFar = afFar;
+		m_bOrtho = abOrtho;
+	}
+	~NiFrustum() {};
+
+	float	m_fLeft;
+	float	m_fRight;
+	float	m_fTop;
+	float	m_fBottom;
+	float	m_fNear;
+	float	m_fFar;
+	bool	m_bOrtho;
+};
+
+template <class T> class NiRect {
+public:
+	NiRect(T left = T(0), T right = T(0), T top = T(0), T bottom = T(0))
+	{
+		m_left = left;
+		m_right = right;
+		m_top = top;
+		m_bottom = bottom;
+	}
+
+	T m_left, m_right, m_top, m_bottom;
+};
+
 class NiRefObject {
 public:
     virtual			~NiRefObject();
@@ -321,10 +357,88 @@ public:
 	}
 };
 
+class NiCamera : public NiAVObject {
+public:
+	NiCamera();
+	virtual ~NiCamera();
+
+	float			m_aafWorldToCam[4][4];
+	NiFrustum		m_kViewFrustum;
+	float			m_fMinNearPlaneDist;
+	float			m_fMaxFarNearRatio;
+	NiRect<float>	m_kPort;
+	float			m_fLODAdjust;
+};
+
+class NiPlane {
+public:
+	NiPoint3	m_kNormal;
+	float		m_fConstant;
+};
+
+class NiFrustumPlanes {
+public:
+	NiPlane	m_akCullingPlanes[6];
+	UInt32	m_uiActivePlanes;
+
+	void Set(const NiFrustum& arFrustum, const NiTransform& arTransform) {
+#ifdef FO3
+		ThisStdCall(0x83ECB0, this, &arFrustum, &arTransform);
+#else
+		ThisStdCall(0xA74E10, this, &arFrustum, &arTransform);
+#endif
+	}
+};
+
+class NiCullingProcess {
+public:
+	virtual const NiRTTI*				GetRTTI() const;
+	virtual NiNode*						IsNiNode() const;
+	virtual BSFadeNode*					IsFadeNode() const;
+	virtual BSMultiBoundNode*			IsMultiBoundNode() const;
+	virtual NiGeometry*					IsGeometry() const;
+	virtual NiTriBasedGeom*				IsTriBasedGeometry() const;
+	virtual NiTriStrips*				IsTriStrips() const;
+	virtual NiTriShape*					IsTriShape() const;
+	virtual BSSegmentedTriShape*		IsSegmentedTriShape() const;
+	virtual BSResizableTriShape*		IsResizableTriShape() const;
+	virtual NiParticles*				IsParticlesGeom() const;
+	virtual NiLines*					IsLinesGeom() const;
+	virtual bhkNiCollisionObject*		IsBhkNiCollisionObject() const;
+	virtual bhkBlendCollisionObject*	IsBhkBlendCollisionObject() const;
+	virtual bhkRigidBody*				IsBhkRigidBody() const;
+	virtual bhkLimitedHingeConstraint*	IsBhkLimitedHingeConstraint() const;
+	virtual								~NiCullingProcess();
+	virtual void						Process(NiAVObject* apObject);
+	virtual void						ProcessAlt(const NiCamera* apCamera, NiAVObject* apScene, void* apVisibleSet);
+
+	bool				m_bUseVirtualAppend;
+	void*				m_pkVisibleSet;
+	NiCamera*			m_pkCamera;
+	NiFrustum			m_kFrustum;
+	NiFrustumPlanes		m_kPlanes;
+
+	void SetFrustum(const NiFrustum& arFrustum) {
+		if (m_pkCamera) {
+			m_kFrustum = arFrustum;
+			m_kPlanes.Set(m_kFrustum, m_pkCamera->m_kWorld);
+			m_kPlanes.m_uiActivePlanes = 63;
+		}
+	}
+};
+
 class ShadowSceneNode {
 public:
 	UInt32		filler[121];
 	NiPoint3	kLightingOffset;
+
+	void PreOnVisible(NiCullingProcess* apCuller) {
+#ifdef FO3
+		ThisStdCall(0xAE5870, this, apCuller);
+#else
+		ThisStdCall(0xB5E870, this, apCuller);
+#endif
+	}
 };
 ASSERT_OFFSET(ShadowSceneNode, kLightingOffset, 0x1E4);
 

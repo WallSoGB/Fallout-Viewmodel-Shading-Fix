@@ -68,6 +68,11 @@ static void RestoreLights(NiNode* apNode) {
 	kLightPosMap.clear();
 }
 
+static void __fastcall CullerFrustumFixHook(ShadowSceneNode* apThis, void*, NiCullingProcess* apCuller) {
+	apCuller->SetFrustum(apCuller->m_pkCamera->m_kViewFrustum);
+	apThis->PreOnVisible(apCuller);
+}
+
 #ifdef FO3
 static void __fastcall OffsetPlayerLightPositionsHook(void* apThis, void*, UInt32 auiThread, UInt32 auiStage) {
 	OffsetLights(PlayerCharacter::GetSingleton()->spPlayerNode);
@@ -99,6 +104,9 @@ EXTERN_DLL_EXPORT bool FOSEPlugin_Load(FOSEInterface* fose) {
 
 		// Fix PipBoy menu light being offset (we do that already)
 		SafeWrite8(0x6E68D3, 0xEB);
+
+		// Fix wrong camera frustum when accumulating PipBoy menu if shadows are disabled
+		ReplaceCall(0x6EACD1, (UInt32)CullerFrustumFixHook);
 	}
 
 	return true;
@@ -134,6 +142,9 @@ EXTERN_DLL_EXPORT bool NVSEPlugin_Load(NVSEInterface* nvse) {
 
 		// Fix PipBoy menu light being offset (we do that already)
 		SafeWrite8(0x874F76, 0xEB);
+
+		// Fix wrong camera frustum when accumulating PipBoy menu if shadows are disabled
+		ReplaceCall(0x87091F, (UInt32)CullerFrustumFixHook);
 	}
 
 	return true;
