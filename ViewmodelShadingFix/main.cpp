@@ -90,7 +90,7 @@ EXTERN_DLL_EXPORT bool FOSEPlugin_Query(const FOSEInterface* fose, PluginInfo* i
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "ViewmodelShadingFix";
 	info->version = VERSION;
-	return true;
+	return !fose->isEditor;
 }
 
 EXTERN_DLL_EXPORT bool FOSEPlugin_Load(FOSEInterface* fose) {
@@ -128,7 +128,7 @@ EXTERN_DLL_EXPORT bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* i
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "ViewmodelShadingFix";
 	info->version = VERSION;
-	return true;
+	return !nvse->isEditor;
 }
 
 EXTERN_DLL_EXPORT bool NVSEPlugin_Load(NVSEInterface* nvse) {
