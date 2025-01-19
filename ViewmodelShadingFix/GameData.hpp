@@ -81,6 +81,8 @@ public:
 	float x, y, z;
 
 	NiPoint3 operator- (const NiPoint3& arPt) const { return NiPoint3(x - arPt.x, y - arPt.y, z - arPt.z); };
+	NiPoint3 operator- () const { return NiPoint3(-x, -y, -z); };
+	NiPoint3 operator-= (const NiPoint3& arPt) { x -= arPt.x; y -= arPt.y; z -= arPt.z; return *this; };
 };
 
 class NiPoint4 {
@@ -428,6 +430,13 @@ public:
 	}
 };
 
+class ShadowSceneLight : public NiRefObject {
+public:
+	UInt32		filler[250 / 4];
+	NiPoint3	kPointPosition;
+};
+ASSERT_OFFSET(ShadowSceneLight, kPointPosition, 256);
+
 class ShadowSceneNode {
 public:
 	UInt32		filler[121];
@@ -438,6 +447,14 @@ public:
 		ThisStdCall(0xAE5870, this, apCuller);
 #else
 		ThisStdCall(0xB5E870, this, apCuller);
+#endif
+	}
+
+	ShadowSceneLight* GetLight(NiAVObject* apLight) {
+#ifdef FO3
+		return ThisStdCall<ShadowSceneLight*>(0xAE1D30, this, apLight);
+#else
+		return ThisStdCall<ShadowSceneLight*>(0xB5B4A0, this, apLight);
 #endif
 	}
 };

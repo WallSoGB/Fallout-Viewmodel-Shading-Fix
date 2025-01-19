@@ -2,6 +2,7 @@
 #include "IDebugLog.h"
 #include "IErrors.h"
 #include <direct.h>
+#include <commdlg.h>
 
 IFileStream::IFileStream()
 	:theFile(NULL)

@@ -10,27 +10,12 @@
     <Filter Include="datatypes">
       <UniqueIdentifier>{f5f79544-dcf5-4caa-87bd-95b27c2a3b67}</UniqueIdentifier>
     </Filter>
-    <Filter Include="utilities">
-      <UniqueIdentifier>{1aca6980-35ec-4606-b204-1e1caf44f3ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="pipe">
-      <UniqueIdentifier>{b1db4bbb-3699-4557-af03-c2ca41a7c049}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="files">
-      <UniqueIdentifier>{fdcf7ab0-6b31-4e21-9ae5-ab65c0af18da}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IBufferStream.cpp">
-      <Filter>streams</Filter>
-    </ClCompile>
     <ClCompile Include="IDataStream.cpp">
       <Filter>streams</Filter>
     </ClCompile>
     <ClCompile Include="IFileStream.cpp">
-      <Filter>streams</Filter>
-    </ClCompile>
-    <ClCompile Include="ISegmentStream.cpp">
       <Filter>streams</Filter>
     </ClCompile>
     <ClCompile Include="IDebugLog.cpp">
@@ -39,57 +24,15 @@
     <ClCompile Include="IErrors.cpp">
       <Filter>debug</Filter>
     </ClCompile>
-    <ClCompile Include="IArchive.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="IDatabase.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="IFIFO.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="IRangeMap.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="ISingleton.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
-    <ClCompile Include="ITextParser.cpp">
-      <Filter>datatypes</Filter>
-    </ClCompile>
     <ClCompile Include="ITypes.cpp">
       <Filter>datatypes</Filter>
     </ClCompile>
-    <ClCompile Include="IConsole.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="IDynamicCreate.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ITimer.cpp">
-      <Filter>utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="IPipeClient.cpp">
-      <Filter>pipe</Filter>
-    </ClCompile>
-    <ClCompile Include="IPipeServer.cpp">
-      <Filter>pipe</Filter>
-    </ClCompile>
-    <ClCompile Include="IDirectoryIterator.cpp">
-      <Filter>files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IBufferStream.h">
-      <Filter>streams</Filter>
-    </ClInclude>
     <ClInclude Include="IDataStream.h">
       <Filter>streams</Filter>
     </ClInclude>
     <ClInclude Include="IFileStream.h">
-      <Filter>streams</Filter>
-    </ClInclude>
-    <ClInclude Include="ISegmentStream.h">
       <Filter>streams</Filter>
     </ClInclude>
     <ClInclude Include="IDebugLog.h">
@@ -98,53 +41,9 @@
     <ClInclude Include="IErrors.h">
       <Filter>debug</Filter>
     </ClInclude>
-    <ClInclude Include="IArchive.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="IDatabase.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="IFIFO.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="ILinkedList.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="IRangeMap.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="ISingleton.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="ITextParser.h">
-      <Filter>datatypes</Filter>
-    </ClInclude>
     <ClInclude Include="ITypes.h">
       <Filter>datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="IConsole.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="IDynamicCreate.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="ITimer.h">
-      <Filter>utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="IPipeClient.h">
-      <Filter>pipe</Filter>
-    </ClInclude>
-    <ClInclude Include="IPipeServer.h">
-      <Filter>pipe</Filter>
-    </ClInclude>
-    <ClInclude Include="IDirectoryIterator.h">
-      <Filter>files</Filter>
-    </ClInclude>
     <ClInclude Include="IPrefix.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="IDatabase.inc">
-      <Filter>datatypes</Filter>
-    </None>
   </ItemGroup>
 </Project>
