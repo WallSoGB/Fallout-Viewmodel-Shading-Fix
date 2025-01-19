@@ -6,6 +6,8 @@
 #define EXTERN_DLL_EXPORT extern "C" __declspec(dllexport)
 #define VERSION 210
 
+BS_ALLOCATORS;
+
 #ifdef FO3
 static NiRTTI* NiLightRTTI = (NiRTTI*)0x108F41C;
 static UInt32 D3DXVec3TransformCoordAddr = 0xC20856;
@@ -150,3 +152,12 @@ EXTERN_DLL_EXPORT bool NVSEPlugin_Load(NVSEInterface* nvse) {
 	return true;
 }
 #endif
+
+BOOL WINAPI DllMain(
+	HANDLE  hDllHandle,
+	DWORD   dwReason,
+	LPVOID  lpreserved
+)
+{
+	return TRUE;
+}

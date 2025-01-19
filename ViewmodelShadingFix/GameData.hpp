@@ -2,6 +2,7 @@
 
 #include "SafeWrite.h"
 #include "Utilities.h"
+#include "Allocator/BSMemory.hpp"
 
 #define ASSERT_SIZE(a, b) static_assert(sizeof(a) == b, "Wrong structure size!");
 #define ASSERT_OFFSET(a, b, c) static_assert(offsetof(a, b) == c, "Wrong member offset!");

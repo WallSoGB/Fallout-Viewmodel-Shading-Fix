@@ -396,3 +396,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/ViewmodelShadingFix/Release-FO3
+/common/Release VC9
